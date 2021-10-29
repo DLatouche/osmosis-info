@@ -12,7 +12,7 @@ import PoolsTable from "../pools/PoolsTable";
 import TokensTable from "../tokens/TokensTable";
 import LiquidityChart from "./LiquidityChart";
 import VolumeChart from "./VolumeChart";
-
+import ButtonGroup from "../../components/buttonGroup/ButtonGroup";
 const useStyles = makeStyles((theme) => {
   return {
     overviewRoot: {
@@ -71,6 +71,14 @@ const useStyles = makeStyles((theme) => {
       fontSize: "12px",
       padding: `2px 0`,
     },
+    containerButton: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    groupButtons: {},
+    groupButton: {},
   };
 });
 
@@ -89,6 +97,9 @@ const Overview = () => {
   const [dataPools, setDataPools] = useState([]);
   const [dataTokens, setDataTokens] = useState([]);
   const history = useHistory();
+  const [selectRangeLiquidity, setSelectRangeLiquidity] = useState("3mo");
+  const [selectRangeVolume, setSelectRangeVolume] = useState("3mo");
+
   const crossMoveLiquidity = useCallback((event, serie) => {
     if (event.time) {
       let price = formateNumberPrice(event.seriesPrices.get(serie));
@@ -172,6 +183,9 @@ const Overview = () => {
     history.push(`/token/${token.symbol}`);
   };
 
+  const onChangeRangeLiquidity = (value) => {};
+  const onChangeRangeVolume = (value) => {};
+
   return (
     <div className={classes.overviewRoot}>
       {/* <div className={classes.radiant}> </div> */}
@@ -179,13 +193,75 @@ const Overview = () => {
         <p className={classes.subTitle}>Osmosis - Overview</p>
         <div className={classes.charts}>
           <Paper className={classes.chart}>
-            <p className={classes.chartTitle}>Liquidity</p>
+            <div className={classes.containerButton}>
+              <p className={classes.chartTitle}>Liquidity</p>
+              <div className={classes.groupButtons}>
+                <ButtonGroup
+                  className={classes.groupButton}
+                  buttons={[
+                    {
+                      id: "3mo",
+                      name: "3mo",
+                      onClick: () => {
+                        onChangeRangeLiquidity("3mo");
+                      },
+                    },
+                    {
+                      id: "1y",
+                      name: "1y",
+                      onClick: () => {
+                        onChangeRangeLiquidity("1y");
+                      },
+                    },
+                    {
+                      id: "all",
+                      name: "all",
+                      onClick: () => {
+                        onChangeRangeLiquidity("all");
+                      },
+                    },
+                  ]}
+                  active={selectRangeLiquidity}
+                />
+              </div>
+            </div>
             <p className={classes.chartTextBig}>{chartLiquidityInfo.price}</p>
             <p className={classes.chartTextSmall}>{chartLiquidityInfo.date}</p>
             <LiquidityChart data={dataLiquidity} crossMove={crossMoveLiquidity} />
           </Paper>
           <Paper className={classes.chart}>
-            <p className={classes.chartTitle}>Volume</p>
+            <div className={classes.containerButton}>
+              <p className={classes.chartTitle}>Volume</p>
+              <div className={classes.groupButtons}>
+                <ButtonGroup
+                  className={classes.groupButton}
+                  buttons={[
+                    {
+                      id: "3mo",
+                      name: "3mo",
+                      onClick: () => {
+                        onChangeRangeVolume("3mo");
+                      },
+                    },
+                    {
+                      id: "1y",
+                      name: "1y",
+                      onClick: () => {
+                        onChangeRangeVolume("1y");
+                      },
+                    },
+                    {
+                      id: "all",
+                      name: "all",
+                      onClick: () => {
+                        onChangeRangeVolume("all");
+                      },
+                    },
+                  ]}
+                  active={selectRangeVolume}
+                />
+              </div>
+            </div>
             <p className={classes.chartTextBig}>{chartVolumeInfo.price}</p>
             <p className={classes.chartTextSmall}>{chartVolumeInfo.date}</p>
             <VolumeChart data={dataVolume} crossMove={crossMoveVolume} />
