@@ -79,10 +79,15 @@ const InfoBar = () => {
   const classes = useStyles();
   const { priceOsmo, priceIon } = usePrices();
   const [time, setTime] = useState(0);
+  let timeRefresh = 0;
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTime((ps) => ps + 1);
+      timeRefresh++;
+      if (timeRefresh >= 60) {
+        document.location.reload();
+      }
     }, 1000);
     return () => clearInterval(timer);
   }, []);
